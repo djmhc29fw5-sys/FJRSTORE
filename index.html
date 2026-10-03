@@ -1,0 +1,1458 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FJR STORE - Performance Máxima para o seu Setup</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: system-ui, -apple-system, sans-serif;
+        }
+        body {
+            background-color: #000000;
+            color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Canvas de Fundo - Ondas Topológicas Leves e Minimalistas */
+        #topographicCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            pointer-events: none;
+            background-color: #000000;
+        }
+
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 40px;
+        }
+        nav {
+            display: flex;
+            gap: 30px;
+        }
+        nav button, nav a {
+            background: none;
+            border: none;
+            color: #888;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        nav button:hover, nav a:hover {
+            color: #fff;
+        }
+        .header-actions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+        
+        .btn-header-login {
+            background: #ffffff;
+            color: #000000;
+            border: none;
+            padding: 10px 22px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            box-shadow: 0 4px 15px rgba(255, 255, 255, 0.1);
+        }
+        .btn-header-login:hover {
+            background: #e0e0e0;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 255, 255, 0.2);
+        }
+
+        .user-profile-badge {
+            background: #0a0a0a;
+            border: 1px solid #222;
+            color: #fff;
+            padding: 8px 16px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .user-profile-badge:hover {
+            border-color: #444;
+            background: #111;
+        }
+        .user-profile-badge .user-avatar {
+            width: 22px;
+            height: 22px;
+            background: #fff;
+            color: #000;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        main {
+            flex: 1;
+            z-index: 1;
+        }
+
+        /* Hero Section */
+        .hero {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 90px 20px 60px 20px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .hero-logo-area {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 14px;
+            margin-bottom: 25px;
+        }
+        .hero-wave-icon {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+        .hero-wave-bar {
+            width: 28px;
+            height: 4px;
+            background: #fff;
+            border-radius: 2px;
+        }
+        .hero-wave-bar:nth-child(2) {
+            width: 20px;
+            margin-left: 4px;
+        }
+        .hero-logo-text {
+            font-size: 38px;
+            font-weight: 900;
+            letter-spacing: 3px;
+            font-style: italic;
+            color: #fff;
+        }
+        .hero-content h1 {
+            font-size: 48px;
+            font-weight: 800;
+            line-height: 1.15;
+            margin-bottom: 18px;
+            letter-spacing: -0.5px;
+        }
+        .hero-desc {
+            color: #888;
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 12px;
+            max-width: 600px;
+        }
+        .hero-subdesc {
+            color: #555;
+            font-size: 14px;
+            margin-bottom: 35px;
+        }
+        .hero-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 45px;
+        }
+        .btn-ver-planos {
+            background: #fff;
+            color: #000;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+            box-shadow: 0 0 20px rgba(255,255,255,0.05);
+        }
+        .btn-ver-planos:hover {
+            background: #e2e8f0;
+            transform: translateY(-1px);
+        }
+        .btn-saiba-mais {
+            background: rgba(255, 255, 255, 0.03);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+        .btn-saiba-mais:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+        .hero-features-list {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            flex-wrap: wrap;
+            font-size: 13px;
+            color: #888;
+        }
+        .hero-feature-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .hero-feature-item i {
+            color: #fff;
+            font-size: 12px;
+        }
+
+        /* Seção de Avaliações em Carrossel Contínuo */
+        .reviews-section {
+            width: 100%;
+            margin: 40px 0 60px 0;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .reviews-header {
+            text-align: center;
+            margin-bottom: 35px;
+            padding: 0 20px;
+        }
+        .reviews-header h2 {
+            font-size: 36px;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 10px;
+            letter-spacing: -0.5px;
+        }
+        .reviews-header p {
+            color: #777;
+            font-size: 15px;
+            max-width: 500px;
+            margin: 0 auto;
+            line-height: 1.5;
+        }
+
+        .marquee-container {
+            width: 100%;
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+            -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+        }
+        .marquee-track {
+            display: flex;
+            gap: 20px;
+            width: max-content;
+            animation: scrollMarquee 35s linear infinite;
+            animation-play-state: running !important;
+        }
+
+        @keyframes scrollMarquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        .tweet-card {
+            background: #050505;
+            border: 1px solid #141414;
+            border-radius: 16px;
+            padding: 20px;
+            width: 350px;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: border-color 0.2s;
+        }
+        .tweet-card:hover { border-color: #222; }
+        .tweet-top {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+        .tweet-user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .tweet-avatar {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            object-fit: cover;
+            background: #111;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #fff;
+            border: 1px solid #222;
+        }
+        .tweet-names h4 {
+            font-size: 14px;
+            font-weight: 700;
+            color: #fff;
+        }
+        .tweet-handle {
+            font-size: 12px;
+            color: #555;
+        }
+        .tweet-x-icon {
+            color: #444;
+            font-size: 14px;
+        }
+        .tweet-body {
+            font-size: 14px;
+            color: #bbb;
+            line-height: 1.5;
+            margin-bottom: 18px;
+            word-break: break-word;
+        }
+        .tweet-body span {
+            color: #fff;
+            font-weight: 500;
+        }
+        .tweet-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #555;
+            font-size: 13px;
+            border-top: 1px solid #0d0d0d;
+            padding-top: 12px;
+        }
+        .tweet-action {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: color 0.2s;
+            cursor: pointer;
+        }
+        .tweet-action:hover { color: #aaa; }
+        .tweet-action.like:hover { color: #ff4444; }
+
+        /* Seções de Destaque / Prova Social */
+        .showcase-section {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+        .showcase-card {
+            background: #030303;
+            border: 1px solid #141414;
+            border-radius: 24px;
+            padding: 30px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.9);
+            text-align: center;
+        }
+        .showcase-media-container {
+            width: 100%;
+            background: #080808;
+            border: 1px solid #1c1c1c;
+            border-radius: 16px;
+            overflow: hidden;
+            margin-bottom: 25px;
+            position: relative;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
+        }
+        .showcase-image {
+            width: 100%;
+            height: auto;
+            display: block;
+            opacity: 0.85;
+            transition: opacity 0.3s;
+        }
+        .showcase-image:hover {
+            opacity: 1;
+        }
+        .showcase-title {
+            font-size: 26px;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 12px;
+            letter-spacing: -0.5px;
+        }
+        .showcase-desc {
+            color: #777;
+            font-size: 14px;
+            line-height: 1.6;
+            max-width: 650px;
+            margin: 0 auto;
+        }
+
+        /* Seção do Produto Principal */
+        .product-section {
+            max-width: 750px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+        .product-card {
+            background: #030303;
+            border: 1px solid #141414;
+            border-radius: 24px;
+            padding: 35px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.9);
+        }
+        .product-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 25px;
+        }
+        .product-icon-box {
+            width: 48px;
+            height: 48px;
+            background: #0a0a0a;
+            border: 1px solid #1c1c1c;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 20px;
+        }
+        .product-title {
+            font-size: 28px;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+        .product-desc {
+            color: #777;
+            font-size: 15px;
+            margin-bottom: 30px;
+        }
+        .tabs-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            background: #000000;
+            padding: 6px;
+            border: 1px solid #141414;
+            border-radius: 16px;
+            margin-bottom: 35px;
+        }
+        .tab-btn {
+            background: transparent;
+            border: none;
+            padding: 14px;
+            border-radius: 12px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s ease;
+        }
+        .tab-btn .tab-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 4px;
+            display: block;
+        }
+        .tab-btn .tab-price {
+            font-size: 15px;
+            font-weight: 700;
+            color: #666;
+            display: block;
+        }
+        .tab-btn.active {
+            background: #0d0d0d;
+            border: 1px solid #222;
+        }
+        .tab-btn.active .tab-name,
+        .tab-btn.active .tab-price {
+            color: #fff;
+        }
+        .price-display-area {
+            display: flex;
+            align-items: baseline;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+        .price-big {
+            font-size: 42px;
+            font-weight: 900;
+            color: #fff;
+            letter-spacing: -1px;
+        }
+        .price-period {
+            font-size: 15px;
+            color: #666;
+        }
+        .payment-subtext {
+            font-size: 13px;
+            color: #555;
+            margin-bottom: 25px;
+        }
+        .divider-line {
+            height: 1px;
+            background: #141414;
+            margin: 25px 0;
+        }
+        .feature-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+            color: #aaa;
+            margin-bottom: 25px;
+        }
+        .feature-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .feature-left i { color: #fff; }
+        .feature-access {
+            color: #555;
+            font-size: 13px;
+        }
+        .info-box {
+            background: #000000;
+            border: 1px solid #141414;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 25px;
+            font-size: 13px;
+            color: #777;
+            line-height: 1.6;
+        }
+        .info-box strong {
+            color: #bbb;
+            display: block;
+            margin-bottom: 8px;
+        }
+        .info-box p { margin-bottom: 8px; }
+        .info-box p:last-child { margin-bottom: 0; }
+        .features-check-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 30px;
+            font-size: 14px;
+            color: #999;
+        }
+        .check-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .check-item i {
+            color: #fff;
+            font-size: 13px;
+        }
+        .buy-action-btn {
+            width: 100%;
+            background: #ffffff;
+            color: #000000;
+            border: none;
+            padding: 16px;
+            border-radius: 14px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 20px rgba(255,255,255,0.05);
+        }
+        .buy-action-btn:hover {
+            background: #e0e0e0;
+            transform: translateY(-1px);
+        }
+        .checkout-footer-info {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin-top: 15px;
+            font-size: 12px;
+            color: #444;
+        }
+
+        /* Modal de Login / Criar Conta */
+        #authModal {
+            position: fixed;
+            inset: 0;
+            z-index: 100;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(8px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .auth-container {
+            width: 100%;
+            max-width: 480px;
+            background: #030303;
+            border: 1px solid #181818;
+            border-radius: 20px;
+            padding: 40px 35px;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.9);
+            position: relative;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        .auth-container::-webkit-scrollbar { width: 5px; }
+        .auth-container::-webkit-scrollbar-thumb {
+            background: #222;
+            border-radius: 10px;
+        }
+        .auth-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: #555;
+            font-size: 18px;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        .auth-close:hover { color: #fff; }
+        .auth-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .auth-logo-text {
+            font-size: 26px;
+            font-weight: 900;
+            letter-spacing: 2px;
+            color: #fff;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .auth-subtitle {
+            font-size: 13px;
+            color: #555;
+        }
+        .form-group { margin-bottom: 18px; }
+        .form-label {
+            display: block;
+            font-size: 11px;
+            font-weight: 700;
+            color: #555;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+        .form-input-wrap { position: relative; }
+        .form-input {
+            width: 100%;
+            background: #000000;
+            border: 1px solid #161616;
+            border-radius: 12px;
+            padding: 14px 16px;
+            color: #fff;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .form-input:focus { border-color: #333; }
+        .input-icon-right {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #444;
+            cursor: pointer;
+        }
+        .form-row-between {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+            margin-bottom: 20px;
+        }
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #777;
+            cursor: pointer;
+        }
+        .checkbox-label input {
+            accent-color: #fff;
+            width: 15px;
+            height: 15px;
+        }
+        .forgot-link {
+            color: #555;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .forgot-link:hover { color: #fff; }
+
+        .conditional-field { display: none; }
+
+        .auth-notice {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #ccc;
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-size: 12px;
+            margin-bottom: 20px;
+            display: none;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .cloudflare-badge {
+            background: #000000;
+            border: 1px solid #161616;
+            border-radius: 10px;
+            padding: 12px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 22px;
+            font-size: 12px;
+            color: #777;
+        }
+        .cf-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .cf-check {
+            width: 16px;
+            height: 16px;
+            background: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #000;
+            font-size: 10px;
+        }
+        .cf-right {
+            text-align: right;
+            font-size: 10px;
+            color: #888;
+            font-weight: bold;
+        }
+
+        .auth-submit-btn {
+            width: 100%;
+            background: #fff;
+            color: #000;
+            border: none;
+            padding: 15px;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .auth-submit-btn:hover { background: #e0e0e0; }
+        .auth-switch-text {
+            text-align: center;
+            margin-top: 22px;
+            font-size: 13px;
+            color: #555;
+        }
+        .auth-switch-text span {
+            color: #fff;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .auth-switch-text span:hover { text-decoration: underline; }
+
+        footer {
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            margin-top: 80px;
+            padding: 40px 20px;
+            background: #000000;
+            z-index: 1;
+        }
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #555;
+            font-size: 14px;
+        }
+
+        @media(max-width: 900px) {
+            nav { display: none; }
+            .tabs-grid { grid-template-columns: 1fr; }
+            .hero-features-list { flex-direction: column; gap: 12px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Canvas para o Fundo de Ondas Topológicas Leves e Fluídas -->
+    <canvas id="topographicCanvas"></canvas>
+
+    <header>
+        <div class="container">
+            <nav>
+                <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})">Início</button>
+                <button onclick="document.getElementById('productSection').scrollIntoView({behavior: 'smooth'})">Serviços</button>
+                <a href="https://x.com/Fernandob_jr" target="_blank">Twitter <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 10px;"></i></a>
+            </nav>
+            <div class="header-actions" id="headerActions">
+                <button class="btn-header-login" id="authHeaderBtn" onclick="openAuthModal('login')">Login</button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="hero-logo-area">
+                <div class="hero-wave-icon">
+                    <div class="hero-wave-bar"></div>
+                    <div class="hero-wave-bar"></div>
+                </div>
+                <span class="hero-logo-text">FJR STORE</span>
+            </div>
+            <div class="hero-content">
+                <h1>Performance máxima para o seu setup gamer</h1>
+                <p class="hero-desc">Ferramentas definitivas de otimização, mira e boost desenvolvidas para elevar o seu nível no competitivo.</p>
+                <p class="hero-subdesc">Mais FPS, menor latência e estabilidade absoluta em cada partida.</p>
+                <div class="hero-buttons">
+                    <button class="btn-ver-planos" onclick="document.getElementById('productSection').scrollIntoView({behavior: 'smooth'})">Ver planos <i class="fa-solid fa-chevron-right" style="font-size: 11px;"></i></button>
+                    <button class="btn-saiba-mais" onclick="document.getElementById('productSection').scrollIntoView({behavior: 'smooth'})">Saiba Mais <i class="fa-solid fa-arrow-right" style="font-size: 12px;"></i></button>
+                </div>
+                <div class="hero-features-list">
+                    <div class="hero-feature-item"><i class="fa-solid fa-check"></i> Instalação rápida e fácil</div>
+                    <div class="hero-feature-item"><i class="fa-solid fa-check"></i> Seguro e sem preocupações</div>
+                    <div class="hero-feature-item"><i class="fa-solid fa-check"></i> Suporte disponível sempre que precisar</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção de Avaliações / Carrossel Contínuo -->
+        <section class="reviews-section">
+            <div class="reviews-header">
+                <h2>Os pros usam e aprovam</h2>
+                <p>Independente do jogo, você vai ter mais performance e vai jogar melhor por conta disso</p>
+            </div>
+
+            <div class="marquee-container">
+                <div class="marquee-track" id="marqueeTrack">
+                    <div class="tweet-card">
+                        <div>
+                            <div class="tweet-top">
+                                <div class="tweet-user-info">
+                                    <div class="tweet-avatar">D</div>
+                                    <div class="tweet-names">
+                                        <h4>Diego Alcantara</h4>
+                                        <span class="tweet-handle">@diegonerd</span>
+                                    </div>
+                                </div>
+                                <i class="fa-brands fa-x-twitter tweet-x-icon"></i>
+                            </div>
+                            <p class="tweet-body">valorant e pc ta lisinho agora, valeu pela otimização <span>@fjrstore</span> !!! monstro</p>
+                        </div>
+                        <div class="tweet-footer">
+                            <div class="tweet-action"><i class="fa-regular fa-comment"></i> 4</div>
+                            <div class="tweet-action"><i class="fa-solid fa-retweet"></i> 1</div>
+                            <div class="tweet-action like"><i class="fa-regular fa-heart"></i> 67</div>
+                            <div class="tweet-action"><i class="fa-solid fa-arrow-up-from-bracket"></i></div>
+                        </div>
+                    </div>
+
+                    <div class="tweet-card">
+                        <div>
+                            <div class="tweet-top">
+                                <div class="tweet-user-info">
+                                    <div class="tweet-avatar">B</div>
+                                    <div class="tweet-names">
+                                        <h4>Bruno Henrique</h4>
+                                        <span class="tweet-handle">@brunao_fps</span>
+                                    </div>
+                                </div>
+                                <i class="fa-brands fa-x-twitter tweet-x-icon"></i>
+                            </div>
+                            <p class="tweet-body">como é bom jogar um fortzinho com o <span>1k de fps</span>, obrigado monstro <span>@fjrstore</span></p>
+                        </div>
+                        <div class="tweet-footer">
+                            <div class="tweet-action"><i class="fa-regular fa-comment"></i> 1</div>
+                            <div class="tweet-action"><i class="fa-solid fa-retweet"></i> 1</div>
+                            <div class="tweet-action like"><i class="fa-regular fa-heart"></i> 38</div>
+                            <div class="tweet-action"><i class="fa-solid fa-arrow-up-from-bracket"></i></div>
+                        </div>
+                    </div>
+
+                    <div class="tweet-card">
+                        <div>
+                            <div class="tweet-top">
+                                <div class="tweet-user-info">
+                                    <div class="tweet-avatar">V</div>
+                                    <div class="tweet-names">
+                                        <h4>Vinicius Costa</h4>
+                                        <span class="tweet-handle">@vincosta_</span>
+                                    </div>
+                                </div>
+                                <i class="fa-brands fa-x-twitter tweet-x-icon"></i>
+                            </div>
+                            <p class="tweet-body">com o boost do melhor do cenario <span>@fjrstore</span> salvou demais meu setup</p>
+                        </div>
+                        <div class="tweet-footer">
+                            <div class="tweet-action"><i class="fa-regular fa-comment"></i> 0</div>
+                            <div class="tweet-action"><i class="fa-solid fa-retweet"></i> 1</div>
+                            <div class="tweet-action like"><i class="fa-regular fa-heart"></i> 32</div>
+                            <div class="tweet-action"><i class="fa-solid fa-arrow-up-from-bracket"></i></div>
+                        </div>
+                    </div>
+
+                    <div class="tweet-card">
+                        <div>
+                            <div class="tweet-top">
+                                <div class="tweet-user-info">
+                                    <div class="tweet-avatar">T</div>
+                                    <div class="tweet-names">
+                                        <h4>Thiago Mendes</h4>
+                                        <span class="tweet-handle">@thiagomk</span>
+                                    </div>
+                                </div>
+                                <i class="fa-brands fa-x-twitter tweet-x-icon"></i>
+                            </div>
+                            <p class="tweet-body">vouch <span>@fjrstore</span> pc fico muito rápido, recomendo demais para todo mundo!</p>
+                        </div>
+                        <div class="tweet-footer">
+                            <div class="tweet-action"><i class="fa-regular fa-comment"></i> 1</div>
+                            <div class="tweet-action"><i class="fa-solid fa-retweet"></i> 1</div>
+                            <div class="tweet-action like"><i class="fa-regular fa-heart"></i> 15</div>
+                            <div class="tweet-action"><i class="fa-solid fa-arrow-up-from-bracket"></i></div>
+                        </div>
+                    </div>
+
+                    <div class="tweet-card">
+                        <div>
+                            <div class="tweet-top">
+                                <div class="tweet-user-info">
+                                    <div class="tweet-avatar">J</div>
+                                    <div class="tweet-names">
+                                        <h4>João Vitor</h4>
+                                        <span class="tweet-handle">@jvitor_tweaks</span>
+                                    </div>
+                                </div>
+                                <i class="fa-brands fa-x-twitter tweet-x-icon"></i>
+                            </div>
+                            <p class="tweet-body">Meu PC melhorou da água pro vinho! O jogo travava direto e agora roda liso sem lag <span>@fjrstore</span></p>
+                        </div>
+                        <div class="tweet-footer">
+                            <div class="tweet-action"><i class="fa-regular fa-comment"></i> 3</div>
+                            <div class="tweet-action"><i class="fa-solid fa-retweet"></i> 2</div>
+                            <div class="tweet-action like"><i class="fa-regular fa-heart"></i> 45</div>
+                            <div class="tweet-action"><i class="fa-solid fa-arrow-up-from-bracket"></i></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção de Destaque 1 (Campeão com FJR Tweaks) -->
+        <section class="showcase-section">
+            <div class="showcase-card">
+                <div class="showcase-media-container">
+                    <img src="https://pbs.twimg.com/media/Gj80oGoWAAAagTv?format=jpg&name=large" alt="Campeões com FJR Tweaks" class="showcase-image">
+                </div>
+                <h3 class="showcase-title">Campeão com FJR Tweaks</h3>
+                <p class="showcase-desc">
+                    Os melhores utilizam o FJR Tweaks. É claro que isso não significa que após usar o aplicativo você vai ganhar automaticamente, mas podemos admitir que é uma grande vantagem, independente do seu computador.
+                </p>
+            </div>
+        </section>
+
+        <!-- Seção de Destaque 2 (Cada milissegundo conta - Novo Print) -->
+        <section class="showcase-section">
+            <div class="showcase-card">
+                <div class="showcase-media-container">
+                    <!-- Substitua o atributo src abaixo pelo link ou arquivo da nova imagem que você enviou -->
+                    <img src="https://pbs.twimg.com/media/GplVHFAXQAA81kX?format=jpg&name=large" alt="Cada milissegundo conta" class="showcase-image">
+                </div>
+                <h3 class="showcase-title">Cada milissegundo conta</h3>
+                <p class="showcase-desc">
+                    No competitivo, uma travadinha muda tudo: a mira sai, o timing erra, e aí você já sabe. Com o FJR Tweaks, você elimina as quedas de FPS e joga com a estabilidade que precisa pra decidir o jogo sem ser sabotado pelo seu PC.
+                </p>
+            </div>
+        </section>
+
+        <!-- Seção do Produto Principal -->
+        <section id="productSection" class="product-section">
+            <div class="product-card">
+                
+                <div class="product-top">
+                    <div>
+                        <h2 class="product-title" id="mainProductTitle">FJR TWEAKS</h2>
+                        <p class="product-desc" id="mainProductDesc">Uma otimização completa no seu PC.</p>
+                    </div>
+                    <div class="product-icon-box">
+                        <i class="fa-solid fa-bolt" id="mainProductIcon"></i>
+                    </div>
+                </div>
+
+                <!-- Seletor de Produtos -->
+                <div class="tabs-grid">
+                    <button class="tab-btn active" onclick="selectProduct('tweaks', event)">
+                        <span class="tab-name">FJR TWEAKS</span>
+                        <span class="tab-price">R$ 39,90</span>
+                    </button>
+                    <button class="tab-btn" onclick="selectProduct('aim', event)">
+                        <span class="tab-name">FJR AIM</span>
+                        <span class="tab-price">R$ 15,99</span>
+                    </button>
+                    <button class="tab-btn" onclick="selectProduct('optimizer', event)">
+                        <span class="tab-name">FJR OPTIMIZER</span>
+                        <span class="tab-price">R$ 20,00</span>
+                    </button>
+                </div>
+
+                <!-- Preço Dinâmico -->
+                <div class="price-display-area">
+                    <div class="price-big" id="priceDisplay">R$ 39,90</div>
+                    <div class="price-period" id="periodDisplay">/ licença</div>
+                </div>
+                <div class="payment-subtext" id="subtextDisplay">Acesso completo à ferramenta</div>
+
+                <div class="divider-line"></div>
+
+                <div class="feature-row">
+                    <div class="feature-left">
+                        <i class="fa-solid fa-check"></i>
+                        <span id="tokenText">Otimização completa do sistema</span>
+                    </div>
+                    <div class="feature-access" id="accessText">acesso completo</div>
+                </div>
+
+                <div class="info-box">
+                    <strong id="infoBoxTitle">Sobre o FJR TWEAKS:</strong>
+                    <p id="infoBoxText">Uma otimização completa no seu PC para extrair o máximo de desempenho e estabilidade nos seus jogos favoritos.</p>
+                </div>
+
+                <div class="features-check-list" id="featureChecklist">
+                    <div class="check-item"><i class="fa-solid fa-check"></i><span>Mais FPS e estabilidade máxima</span></div>
+                    <div class="check-item"><i class="fa-solid fa-check"></i><span>Menos latência e remoção de travamentos</span></div>
+                </div>
+
+                <!-- Botão de Ação -->
+                <button class="buy-action-btn" onclick="openWhatsAppCheckout()">
+                    <span id="btnTextDisplay">Adquirir FJR TWEAKS</span>
+                    <i class="fa-brands fa-whatsapp" style="font-size: 18px; color: #000000;"></i>
+                </button>
+
+                <div class="checkout-footer-info">
+                    <span><i class="fa-solid fa-credit-card"></i> Pix ou cartão</span>
+                    <span>•</span>
+                    <span>Ativação instantânea via WhatsApp</span>
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal de Login / Criar Conta -->
+    <div id="authModal">
+        <div class="auth-container">
+            <button class="auth-close" onclick="closeAuthModal()"><i class="fa-solid fa-xmark"></i></button>
+            
+            <div class="auth-header">
+                <div class="auth-logo-text">
+                    <i class="fa-solid fa-bolt text-white"></i> FJR STORE
+                </div>
+                <div class="auth-subtitle" id="authSubtitle">Acesse sua conta</div>
+            </div>
+
+            <div class="auth-notice" id="authNotice">
+                <i class="fa-solid fa-triangle-exclamation"></i> Você precisa estar logado para realizar uma compra.
+            </div>
+
+            <form onsubmit="handleAuthSubmit(event)">
+                <div class="form-group conditional-field" id="emailFieldGroup">
+                    <label class="form-label">E-mail</label>
+                    <div class="form-input-wrap">
+                        <input type="email" class="form-input" id="authEmailInput" placeholder="seuemail@exemplo.com">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" id="userLabel">Identificador</label>
+                    <div class="form-input-wrap">
+                        <input type="text" class="form-input" id="authUserInput" placeholder="Usuário ou email" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Senha</label>
+                    <div class="form-input-wrap">
+                        <input type="password" class="form-input" id="authPassInput" placeholder="Digite sua senha" required>
+                        <i class="fa-regular fa-eye input-icon-right" onclick="togglePassword('authPassInput')"></i>
+                    </div>
+                </div>
+
+                <div class="form-group conditional-field" id="confirmPassGroup">
+                    <label class="form-label">Confirmar Senha</label>
+                    <div class="form-input-wrap">
+                        <input type="password" class="form-input" id="authConfirmPassInput" placeholder="Repita sua senha">
+                        <i class="fa-regular fa-eye input-icon-right" onclick="togglePassword('authConfirmPassInput')"></i>
+                    </div>
+                </div>
+
+                <div class="form-row-between" id="loginOptionsRow">
+                    <label class="checkbox-label">
+                        <input type="checkbox"> Lembrar de mim
+                    </label>
+                    <a href="#" class="forgot-link" onclick="alert('Instruções de recuperação enviadas!')">Esqueceu a senha?</a>
+                </div>
+
+                <div class="cloudflare-badge">
+                    <div class="cf-left">
+                        <div class="cf-check"><i class="fa-solid fa-check"></i></div>
+                        <span>Success!</span>
+                    </div>
+                    <div class="cf-right">
+                        CLOUDFLARE<br>
+                        <span style="font-size: 8px; font-weight: normal; color: #444;">Privacy • Help</span>
+                    </div>
+                </div>
+
+                <button type="submit" class="auth-submit-btn" id="authSubmitBtnText">Entrar</button>
+
+                <div class="auth-switch-text" id="authSwitchText">
+                    Não tem conta? <span onclick="switchAuthMode()">Criar conta</span>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <div><strong>FJR STORE</strong> © 2026 - Todos os direitos reservados.</div>
+            <a href="https://discord.gg/HAA9MzKKm6" target="_blank" style="color: #666; text-decoration: none;">Discord</a>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            const track = document.getElementById('marqueeTrack');
+            track.innerHTML += track.innerHTML; 
+        });
+
+        const productsData = {
+            tweaks: {
+                name: "FJR TWEAKS",
+                price: "R$ 39,90",
+                desc: "Uma otimização completa no seu PC.",
+                subtext: "Pacote completo de otimização de sistema",
+                token: "Otimização profunda do Windows",
+                access: "acesso completo",
+                infoTitle: "Sobre o FJR TWEAKS:",
+                infoText: "FJR TWEAKS é uma otimização completa no seu PC, focada em remover gargalos, reduzir latência e maximizar o desempenho em jogos.",
+                btn: "Adquirir FJR TWEAKS",
+                icon: "fa-solid fa-bolt",
+                checkList: [
+                    "Mais FPS e estabilidade máxima",
+                    "Menos latência e remoção de travamentos"
+                ]
+            },
+            aim: {
+                name: "FJR AIM",
+                price: "R$ 15,99",
+                desc: "Aplicativo de mira fixa para FIVE M.",
+                subtext: "Ferramenta dedicada para melhor precisão",
+                token: "Overlay de mira personalizada",
+                access: "pronto para uso no FiveM",
+                infoTitle: "Sobre o FJR AIM:",
+                infoText: "FJR AIM é um app de mira fixa para FIVE M, desenvolvido para auxiliar na precisão dos seus tiros sem interferir nos arquivos do jogo.",
+                btn: "Adquirir FJR AIM",
+                icon: "fa-solid fa-crosshairs",
+                checkList: [
+                    "Mira fixa personalizável",
+                    "Totalmente otimizado para FiveM"
+                ]
+            },
+            optimizer: {
+                name: "FJR OPTIMIZER",
+                price: "R$ 20,00",
+                desc: "Aplicativo de otimização.",
+                subtext: "Software focado em performance leve",
+                token: "Limpeza de cache e boost de memória",
+                access: "otimização em tempo real",
+                infoTitle: "Sobre o FJR OPTIMIZER:",
+                infoText: "FJR OPTIMIZER é um app de otimização leve e direto, focado em limpar processos em segundo plano e turbinar o hardware.",
+                btn: "Adquirir FJR OPTIMIZER",
+                icon: "fa-solid fa-gauge-high",
+                checkList: [
+                    "Limpeza inteligente de memória RAM",
+                    "Prioridade máxima para aplicações de jogos"
+                ]
+            }
+        };
+
+        let currentProductKey = 'tweaks';
+        let authMode = 'login'; 
+        let currentUser = null; 
+        let pendingCheckout = false; 
+
+        function selectProduct(key, event) {
+            currentProductKey = key;
+            const p = productsData[key];
+
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+
+            document.getElementById('mainProductTitle').innerText = p.name;
+            document.getElementById('mainProductDesc').innerText = p.desc;
+            document.getElementById('priceDisplay').innerText = p.price;
+            document.getElementById('subtextDisplay').innerText = p.subtext;
+            document.getElementById('tokenText').innerText = p.token;
+            document.getElementById('accessText').innerText = p.access;
+            document.getElementById('infoBoxTitle').innerText = p.infoTitle;
+            document.getElementById('infoBoxText').innerText = p.infoText;
+            document.getElementById('btnTextDisplay').innerText = p.btn;
+            document.getElementById('mainProductIcon').className = p.icon;
+
+            const checklistContainer = document.getElementById('featureChecklist');
+            checklistContainer.innerHTML = '';
+            p.checkList.forEach(item => {
+                checklistContainer.innerHTML += `<div class="check-item"><i class="fa-solid fa-check"></i><span>${item}</span></div>`;
+            });
+        }
+
+        function openAuthModal(mode, showNotice = false) {
+            authMode = mode || 'login';
+            updateAuthModalUI();
+            
+            const noticeEl = document.getElementById('authNotice');
+            if (showNotice) {
+                noticeEl.style.display = 'flex';
+            } else {
+                noticeEl.style.display = 'none';
+            }
+
+            document.getElementById('authModal').style.display = 'flex';
+        }
+
+        function closeAuthModal() {
+            document.getElementById('authModal').style.display = 'none';
+            document.getElementById('authNotice').style.display = 'none';
+        }
+
+        function switchAuthMode() {
+            authMode = authMode === 'login' ? 'register' : 'login';
+            updateAuthModalUI();
+        }
+
+        function updateAuthModalUI() {
+            const emailGroup = document.getElementById('emailFieldGroup');
+            const confirmPassGroup = document.getElementById('confirmPassGroup');
+            const loginOptionsRow = document.getElementById('loginOptionsRow');
+            const userLabel = document.getElementById('userLabel');
+            const userInput = document.getElementById('authUserInput');
+
+            if (authMode === 'login') {
+                document.getElementById('authSubtitle').innerText = 'Acesse sua conta';
+                document.getElementById('authSubmitBtnText').innerText = 'Entrar';
+                document.getElementById('authSwitchText').innerHTML = 'Não tem conta? <span onclick="switchAuthMode()">Criar conta</span>';
+                
+                emailGroup.style.display = 'none';
+                confirmPassGroup.style.display = 'none';
+                loginOptionsRow.style.display = 'flex';
+                userLabel.innerText = 'Identificador';
+                userInput.placeholder = 'Usuário ou email';
+                userInput.required = true;
+            } else {
+                document.getElementById('authSubtitle').innerText = 'Crie sua nova conta';
+                document.getElementById('authSubmitBtnText').innerText = 'Criar Conta';
+                document.getElementById('authSwitchText').innerHTML = 'Já tem uma conta? <span onclick="switchAuthMode()">Entrar</span>';
+                
+                emailGroup.style.display = 'block';
+                confirmPassGroup.style.display = 'block';
+                loginOptionsRow.style.display = 'none';
+                userLabel.innerText = 'Nome de Usuário';
+                userInput.placeholder = 'Escolha seu usuário';
+                userInput.required = true;
+                document.getElementById('authEmailInput').required = true;
+                document.getElementById('authConfirmPassInput').required = true;
+            }
+        }
+
+        function togglePassword(elementId) {
+            const passInput = document.getElementById(elementId);
+            passInput.type = passInput.type === 'password' ? 'text' : 'password';
+        }
+
+        function handleAuthSubmit(event) {
+            event.preventDefault();
+            const userVal = document.getElementById('authUserInput').value.trim();
+
+            if (authMode === 'register') {
+                const pass = document.getElementById('authPassInput').value;
+                const confirmPass = document.getElementById('authConfirmPassInput').value;
+
+                if (pass !== confirmPass) {
+                    alert('As senhas não coincidem. Por favor, verifique.');
+                    return;
+                }
+            }
+
+            currentUser = userVal;
+            updateHeaderUserUI();
+            closeAuthModal();
+            
+            if (pendingCheckout) {
+                pendingCheckout = false;
+                executeWhatsAppCheckout();
+            } else {
+                alert(authMode === 'login' ? `Bem-vindo de volta, ${currentUser}!` : `Conta "${currentUser}" criada com sucesso!`);
+            }
+        }
+
+        function updateHeaderUserUI() {
+            const headerActions = document.getElementById('headerActions');
+            const firstLetter = currentUser ? currentUser.charAt(0).toUpperCase() : 'U';
+            
+            if (currentUser) {
+                headerActions.innerHTML = `
+                    <div class="user-profile-badge" title="Clique para sair" onclick="logoutUser()">
+                        <div class="user-avatar">${firstLetter}</div>
+                        <span>${currentUser}</span>
+                        <i class="fa-solid fa-right-from-bracket" style="margin-left: 5px; color: #ff5555;"></i>
+                    </div>
+                `;
+            } else {
+                headerActions.innerHTML = `
+                    <button class="btn-header-login" id="authHeaderBtn" onclick="openAuthModal('login')">Login</button>
+                `;
+            }
+        }
+
+        function logoutUser() {
+            if (confirm('Deseja realmente sair da sua conta?')) {
+                currentUser = null;
+                updateHeaderUserUI();
+            }
+        }
+
+        function openWhatsAppCheckout() {
+            if (!currentUser) {
+                pendingCheckout = true;
+                openAuthModal('login', true);
+                return;
+            }
+            executeWhatsAppCheckout();
+        }
+
+        function executeWhatsAppCheckout() {
+            const p = productsData[currentProductKey];
+            const phone = "5516996563158";
+            
+            let message = `Olá! Quero adquirir o produto *${p.name}* no valor de *${p.price}*.`;
+            if (currentUser) {
+                message += ` Meu usuário na plataforma é: *${currentUser}*.`;
+            }
+
+            const encodedMessage = encodeURIComponent(message);
+            const whatsappUrl = `https://wa.me/${phone}?text=${encodedMessage}`;
+            
+            window.open(whatsappUrl, '_blank');
+        }
+
+        // Fundo Animado com Ondas Topológicas Suaves e Fluídas
+        const canvas = document.getElementById('topographicCanvas');
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        let step = 0;
+
+        function drawTopographicWaves() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.lineWidth = 1.2;
+
+            const lines = 24;
+            const spacing = canvas.height / lines;
+
+            for (let i = 0; i < lines; i++) {
+                ctx.beginPath();
+                let alpha = ((i + 1) / lines) * 0.25 + 0.05;
+                ctx.strokeStyle = `rgba(255, 255, 255, ${alpha})`;
+
+                for (let x = 0; x <= canvas.width; x += 15) {
+                    let y = i * spacing + 
+                            Math.sin(x * 0.003 + step + i * 0.3) * 35 + 
+                            Math.cos(x * 0.005 - step * 0.7) * 20;
+                    
+                    if (x === 0) {
+                        ctx.moveTo(x, y);
+                    } else {
+                        ctx.lineTo(x, y);
+                    }
+                }
+                ctx.stroke();
+            }
+
+            step += 0.008;
+            requestAnimationFrame(drawTopographicWaves);
+        }
+
+        drawTopographicWaves();
+    </script>
+</body>
+</html>
